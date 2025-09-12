@@ -1,5 +1,5 @@
 package com.example.todo;
 
 public enum Status {
-    PENDING, DONE
+    PENDING, IN_PROGRESS, DONE
 }
