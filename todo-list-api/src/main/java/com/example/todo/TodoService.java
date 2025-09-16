@@ -1,7 +1,12 @@
 package com.example.todo;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.UUID;
 
 @Service
 public class TodoService {
@@ -13,5 +18,50 @@ public class TodoService {
 
     public Page<Todo> list(Pageable pageable){
         return repo.findAll(pageable);
+    }
+
+    public Todo create(Todo input){
+        if(input.getTitle() == null || input.getTitle().isBlank()){
+            throw new IllegalArgumentException("Title cannot be empty");
+        }
+
+        if(input.getStatus() == null){
+            input.setStatus(Status.PENDING);
+        }
+
+        if(input.getCreatedAt() == null){
+            input.setCreatedAt(java.time.LocalDateTime.now());
+        }
+        return repo.save(input);
+    }
+
+    @Transactional
+    public Todo update(UUID id, Todo changes){
+        Todo existing = repo.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND,"todo not found"));
+
+        if(changes.getTitle() != null && !changes.getTitle().isBlank()){
+            existing.setTitle(changes.getTitle());
+        }
+
+        if(changes.getStatus() != null){
+            existing.setStatus(changes.getStatus());
+        }
+
+        existing.setUpdatedAt(java.time.LocalDateTime.now());
+
+        return existing;
+    }
+
+    public void delete(UUID id){
+        if(!repo.existsById(id)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"todo not found");
+        }
+        repo.deleteById(id);
+    }
+
+    public Todo getById(UUID id){
+        return repo.findById(id).orElseThrow(()->
+            new ResponseStatusException(HttpStatus.NOT_FOUND,"todo not found"));
     }
 }
