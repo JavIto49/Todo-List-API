@@ -1,28 +1,32 @@
 package com.example.todo;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Entity class representing a Todo item.
+ * Maps to the "Todos" table and includes fields
+ * for ID, title, timestamps, and status.
+ */
 @Entity
 @Table(name = "Todos")
 public class Todo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID id; // Primary key
 
     @Column(nullable = false)
-    private String title;
+    private String title; // Description of the task
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt; // Time of task creation
+    private LocalDateTime updatedAt; // Time of task update
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status; // Task state
 
-    // Getters & setters
+    // --- Getters & setters ---
     public UUID getId() {
         return id;
     }

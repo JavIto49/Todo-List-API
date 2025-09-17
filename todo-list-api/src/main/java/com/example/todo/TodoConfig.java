@@ -3,9 +3,12 @@ package com.example.todo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import java.time.LocalDateTime;
 
+/**
+ * Application configuration for initializing the database.
+ * Seeds a couple of Todo entries on startup if the repository is empty.
+ */
 @Configuration
 public class TodoConfig {
     @Bean

@@ -1,8 +1,8 @@
-### GET request to example server
+### Example request against external test server
 GET https://examples.http-client.intellij.net/get
     ?generated-in=IntelliJ IDEA
 
-###
+### Create a new Todo
 POST http://localhost:8081/api/v1/todos
 Content-Type: application/json
 
@@ -11,14 +11,17 @@ Content-Type: application/json
   "status": "PENDING"
 }
 
-###
+### Update an existing Todo by ID
 PUT http://localhost:8081/api/v1/todos/cd42c555-7bba-44bb-bc51-6d0f66cbbdd6
 Content-Type: application/json
 
-{ "title": "Ship CRUD today", "status": "DONE" }
+{
+  "title": "Ship CRUD today",
+  "status": "DONE"
+}
 
-###
+### Delete a Todo by ID
 DELETE http://localhost:8081/api/v1/todos/2f4640bb-ba76-409d-877a-0637f591be39
 
-###
+### Get a single Todo by ID
 GET http://localhost:8081/api/v1/todos/2f4640bb-ba76-409d-877a-0637f591be39
