@@ -2,8 +2,12 @@ package com.example.todo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -23,9 +27,17 @@ public class TodoController {
      * Retrieve a paginated list of todos, sorted by creation date (newest first).
      */
     @GetMapping
-    public Page<Todo> list(@RequestParam(defaultValue = "0") int page,
-                           @RequestParam(defaultValue = "10") int size) {
-        return service.list(PageRequest.of(page, size, Sort.by("createdAt").descending()));
+    public Page<Todo> list(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam Optional<Status> status,
+            @RequestParam Optional<Priority> priority,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> dueBefore,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> dueAfter,
+            @RequestParam Optional<String> q)
+    {
+        var pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return service.listFiltered(pageable, status, priority, dueBefore, dueAfter, q);
     }
 
     /**

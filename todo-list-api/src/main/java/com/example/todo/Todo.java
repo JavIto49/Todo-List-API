@@ -1,6 +1,8 @@
 package com.example.todo;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -25,6 +27,11 @@ public class Todo {
 
     @Enumerated(EnumType.STRING)
     private Status status; // Task state
+
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
+
+    private LocalDate dueDate;
 
     // --- Getters & setters ---
     public UUID getId() {
@@ -65,5 +72,21 @@ public class Todo {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public LocalDate getDueDate(){
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate){
+        this.dueDate = dueDate;
     }
 }

@@ -2,9 +2,13 @@ package com.example.todo;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -22,9 +26,40 @@ public class TodoService {
     /**
      * Return a paginated list of todos.
      */
-    public Page<Todo> list(Pageable pageable){
-        return repo.findAll(pageable);
+    public Page<Todo> listFiltered(
+            Pageable pageable,
+            Optional<Status> status,
+            Optional<Priority> priority,
+            Optional<LocalDate> dueBefore,
+            Optional<LocalDate> dueAfter,
+            Optional<String> q)
+    {
+        Specification<Todo> spec = (root, cq, cb) -> null;
+
+        if(status.isPresent()){
+            spec = spec.and((root, cq, cb) -> cb.equal(root.get("status"), status.get()));
+        }
+
+        if(priority.isPresent()){
+            spec = spec.and((root, cq, cb) -> cb.equal(root.get("priority"), priority.get()));
+        }
+
+        if(dueBefore.isPresent()){
+            spec = spec.and(((root, cq, cb) -> cb.lessThanOrEqualTo(root.get("dueDate"), dueBefore.get())));
+        }
+
+        if(dueAfter.isPresent()){
+            spec = spec.and(((root, cq, cb) -> cb.greaterThanOrEqualTo(root.get("dueDate"), dueAfter.get())));
+        }
+
+        if(q.isPresent() && !q.get().isBlank()){
+            String like = "%" + q.get().toLowerCase() + "%";
+            spec = spec.and((root, cq, cb) -> cb.like(cb.lower(root.get("title")), like));
+        }
+
+        return repo.findAll(spec, pageable);
     }
+
 
     /**
      * Create a new todo with default values if needed.
@@ -32,7 +67,7 @@ public class TodoService {
      * - Status defaults to PENDING
      * - createdAt defaults to current time
      */
-    public Todo create(Todo input){
+            public Todo create(Todo input){
         if(input.getTitle() == null || input.getTitle().isBlank()){
             throw new IllegalArgumentException("Title cannot be empty");
         }
@@ -44,6 +79,11 @@ public class TodoService {
         if(input.getCreatedAt() == null){
             input.setCreatedAt(java.time.LocalDateTime.now());
         }
+
+        if(input.getPriority() == null){
+            input.setPriority(Priority.MEDIUM);
+        }
+
         return repo.save(input);
     }
 
@@ -62,6 +102,14 @@ public class TodoService {
 
         if(changes.getStatus() != null){
             existing.setStatus(changes.getStatus());
+        }
+
+        if(changes.getDueDate() != null){
+            existing.setDueDate(changes.getDueDate());
+        }
+
+        if(changes.getPriority() != null){
+            existing.setPriority(changes.getPriority());
         }
 
         existing.setUpdatedAt(java.time.LocalDateTime.now());
