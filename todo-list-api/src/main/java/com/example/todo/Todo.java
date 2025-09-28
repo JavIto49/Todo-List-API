@@ -1,6 +1,8 @@
 package com.example.todo;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +21,7 @@ public class Todo {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id; // Primary key
 
+    @NotBlank(message = "title cannot be blank")
     @Column(nullable = false)
     private String title; // Description of the task
 
@@ -31,6 +34,7 @@ public class Todo {
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
+    @FutureOrPresent(message = "dueDate cannot be in the past")
     private LocalDate dueDate;
 
     // --- Getters & setters ---

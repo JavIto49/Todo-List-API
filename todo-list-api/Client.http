@@ -37,3 +37,27 @@ GET http://localhost:8081/api/v1/todos?dueAfter=2025-09-25&dueBefore=2025-10-09
 
 ###
 GET http://localhost:8081/api/v1/todos?q=career
+
+###
+POST http://localhost:8081/api/v1/todos
+Content-Type: application/json
+
+{
+"title": "Test Postgres persistence #2", "dueDate": "2025-10-15"
+}
+
+###
+POST http://localhost:8081/api/v1/todos
+Content-Type: application/json
+
+{
+  "title": " "
+}
+
+###
+POST http://localhost:8081/api/v1/todos
+Content-Type: application/json
+
+{
+  "title": "Backdated", "dueDate": "2024-01-01"
+}

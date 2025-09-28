@@ -1,4 +1,5 @@
 package com.example.todo;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -45,7 +46,7 @@ public class TodoController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Todo create(@RequestBody Todo body){
+    public Todo create(@Valid @RequestBody Todo body){
         return service.create(body);
     }
 
@@ -53,7 +54,7 @@ public class TodoController {
      * Update an existing todo by ID.
      */
     @PutMapping("/{id}")
-    public Todo update(@PathVariable UUID id, @RequestBody Todo body){
+    public Todo update(@PathVariable UUID id, @Valid @RequestBody Todo body){
         return service.update(id, body);
     }
 
