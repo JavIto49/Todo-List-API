@@ -3,13 +3,19 @@ package com.example.todo;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Global exception handler for API validation errors.
+ * Catches validation failures and returns structured JSON with error details.
+ */
 @RestControllerAdvice
 public class ApiExceptionHandler {
-
+    /**
+     * Handle validation errors for request bodies.
+     * Maps field-specific error messages into a JSON response.
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, Object> handleBodyValidation(MethodArgumentNotValidException ex) {

@@ -26,38 +26,38 @@ DELETE http://localhost:8081/api/v1/todos/2f4640bb-ba76-409d-877a-0637f591be39
 ### Get a single Todo by ID
 GET http://localhost:8081/api/v1/todos/2f4640bb-ba76-409d-877a-0637f591be39
 
-###
+### List todos with filtering
 GET http://localhost:8081/api/v1/todos?priority=HIGH
 
-###
+### Pending todos due before Oct 5
 GET http://localhost:8081/api/v1/todos?status=PENDING&dueBefore=2025-10-05
 
-###
+### Todos due between Sept 25–Oct 9
 GET http://localhost:8081/api/v1/todos?dueAfter=2025-09-25&dueBefore=2025-10-09
 
-###
+### Todos with keyword "career"
 GET http://localhost:8081/api/v1/todos?q=career
 
-###
+### Valid todo with future dueDate
 POST http://localhost:8081/api/v1/todos
 Content-Type: application/json
 
 {
-"title": "Test Postgres persistence #2", "dueDate": "2025-10-15"
+  "title": "Test Postgres persistence #2", "dueDate": "2025-10-15"
 }
 
-###
+### Invalid: blank title
 POST http://localhost:8081/api/v1/todos
 Content-Type: application/json
 
 {
-  "title": " "
+"title": " "
 }
 
-###
+### Invalid: dueDate in the past
 POST http://localhost:8081/api/v1/todos
 Content-Type: application/json
 
 {
-  "title": "Backdated", "dueDate": "2024-01-01"
+"title": "Backdated", "dueDate": "2024-01-01"
 }

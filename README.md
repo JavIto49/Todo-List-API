@@ -1,21 +1,22 @@
 # Todo-List-API
 
-A simple REST API built with Spring Boot that supports basic CRUD (Create, Read, Update, Delete) operations for managing todo tasks.
+A simple REST API built with Spring Boot that supports basic CRUD (Create, Read, Update, Delete) operations for managing todo tasks, with filtering, validation, and additional fields.
 
 ⸻
 
 Features:
-	•	Create new todo items
-	•	View a paginated list of todos
+	•	Create new todo items with title, status, dueDate, and priority
+	•	View a paginated list of todos with filtering/search options
 	•	Update existing todos
 	•	Delete todos
+	•	Validation for input data to ensure correctness
 
 ⸻
 
 Tech Stack:
 	•	Java 21
 	•	Spring Boot (Web, Data JPA)
-	•	H2 in-memory database
+	•	PostgreSQL database
 
 ⸻
 
@@ -35,5 +36,24 @@ Content-Type: application/json
 
 {
   "title": "Finish project",
-  "status": "PENDING"
+  "status": "PENDING",
+  "priority": "HIGH",
+  "dueDate": "2024-07-01"
+}
+
+	•	Validation failure response example:
+Status: 400 Bad Request
+Content-Type: application/json
+
+{
+  "errors": [
+    {
+      "field": "title",
+      "message": "Title must not be blank"
+    },
+    {
+      "field": "dueDate",
+      "message": "Due date must be a valid future date"
+    }
+  ]
 }

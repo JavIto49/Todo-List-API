@@ -43,6 +43,7 @@ public class TodoController {
 
     /**
      * Create a new todo.
+     * @Valid triggers validation rules defined in the Todo entity.
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
